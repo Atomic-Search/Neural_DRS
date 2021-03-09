@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# -*- coding: utf8 -*-
+
 """
 This should serve as an interface between the Atomic pipeline and the 
 Discourse Representation Theory model for parsing. It replaces "parse.sh".
@@ -56,11 +58,51 @@ FORCE_PP = True       # whether we force postprocessing or skip if already there
 SILENT = "--silent"   # silent parsing
 FORCE = "-f"          # force reprocessing if directory already exists
 
-# For tarring our own models
+# For tarring our own models  ??
 VOCAB = "vocabulary/"
 CONFIG = "config.json"
 model_file = "model.tar.gz"
 #/settings.sh
+
+#parse.sh
+# Parse raw text with an AllenNLP model
+# Note: this script does not work when using multiple encoders
+# Arguments: $1: input raw file (not tokenized!)
+#            $2: model file
+#            $3: target vocab
+
+CURRENT_MODEL = f"{CWD}/models/allennlp/bert_char_1enc.tar.gz"
+VOCAB_FILE = f"{CWD}/vocabs/allennlp/tgt_bert_char_1enc.txt"
+
+def parse(text, 
+          model=CURRENT_MODEL, 
+          vocab_file=VOCAB_FILE):
+        """[summary]
+
+        Args:
+            text ([type]): [description]
+            model ([type], optional): [description]. Defaults to CURRENT_MODEL.
+            vocab_file ([type], optional): [description]. Defaults to VOCAB_FILE.
+        """
+        os.environ["PYTHONPATH"] = DRS_GIT + "/evaluation/:${PYTHONPATH}"
+        os.environ["PYTHONPATH"] = NEURAL_GIT + "/src/:${PYTHONPATH}"
+
+        
+# Put raw text in format we read with our dataset reader, i.e. add dummy DRS after each line
+alp_file=${raw_file}.alp
+cp $raw_file $alp_file
+TAB=$'\t'
+sed -e "s/$/${TAB}Dummy/" -i $alp_file
+
+# Do the predicting
+out_file=${raw_file}.drs
+allennlp predict $cur_model $alp_file --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file $out_file $SILENT
+
+# Now do postprocessing, replace ill-formed DRSs by dummies
+python $PP_PY --input_file $out_file --output_file ${out_file}.out --sig_file $SIG_FILE --fix --json --sep $SEP -rcl $REMOVE_CLAUSES -m $MIN_TOKENS -voc $vocab_file $no_sep
+
+# Remove temporary .alp file (clean up)
+rm $alp_file
 
 
 def main():
