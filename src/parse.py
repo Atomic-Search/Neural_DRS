@@ -41,6 +41,7 @@ SRC_PYTHON = NEURAL_GIT + "/src"
 PP_PY = SRC_PYTHON + "/postprocess.py"
 SIG_FILE = DRS_GIT + "/evaluation/clf_signature.yaml"
 COUNTER = DRS_GIT + "/evaluation/counter.py"
+FINAL_FILE = NEURAL_GIT + "/drs_representation.txt"
 
 # Setting for postprocessing
 REMOVE_CLAUSES = 75
@@ -108,15 +109,16 @@ def parse(text,
     
     # Now do postprocessing, replace ill-formed DRSs by dummies
     try:
-        os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {OUTPUT_FILE}.out --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
+        os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {FINAL_FILE} --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
     except:
         sys.stderr.write("Postprocessing command failed.")
 
     # Read back in the resulting DRS.
-    with open(f"{OUTPUT_FILE}.out", "r") as outputf:
+    with open(FINAL_FILE, "r") as outputf:
         drs_parse = outputf.read()
 
     # Remove temporary files (clean up)
-    os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {OUTPUT_FILE}.out")
+    os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {FINAL_FILE}")
     
     return drs_parse
+# {OUTPUT_FILE}.out
