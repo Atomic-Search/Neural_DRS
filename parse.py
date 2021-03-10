@@ -21,7 +21,7 @@ TODO: Add switch for outputing human-readable DRSs for debugging, etc.
 
 import os
 import sys
-import settings
+from settings import *
 
 
 def parse(text, 
