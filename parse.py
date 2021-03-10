@@ -24,55 +24,54 @@ import sys
 from settings import *
 
 
-def parse(text, 
-        model=CURRENT_MODEL, 
-        vocab_file=VOCAB_FILE,
-        for_humans=False,
-        ):
-    """
-    This function is an interface around Neural DSR's prediction
-    commands and assorted settings. It is intended to be imported
-    into the Atomic pipeline, processing one sentence (or unit
-    of text) at a time and returning the machine-readable discourse
-    representation structure.
-
-    Args:
-        text        (string):           A plain string of one or more sentences.
-        model       (str, optional):    Location of the model to use. Defaults to CURRENT_MODEL.
-        vocab_file  (str, optional):    Location of the vocab to use. Defaults to VOCAB_FILE.
-        for_humans  (bool, optional):   True if you want DRS formatted for human consumption.
-    """
-    # Put raw text in format we read with our dataset reader, i.e. add dummy DRS after each line
-    text = text.strip()
-    text = text + "\tDummy"
-
-    # It's not very pretty, but for now we have to turn this input into a file. 
-    # TODO: Figure out how to avoid these otherwise unnecessary files.
-    with open(INPUT_FILE, "w") as inputf:
-        print(text, file=inputf)
-
-    # Do the predicting -- to start we'll use the shell command. Pythonize this later.
-    try:
-        os.system(f"allennlp predict {CURRENT_MODEL} {INPUT_FILE} --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file {OUTPUT_FILE} {SILENT}")
-    except:
-        sys.stderr.write("Parsing command failed.")
+class Drs:
+    def __init__(self, text, model=CURRENT_MODEL, vocab=VOCAB_FILE):
+        self.text = text
+        self.model = model
+        self.vocab = vocab
+        self.drs = self.parse(text, model, vocab)
     
-    # Now do postprocessing, replace ill-formed DRSs by dummies
-    import pdb; pdb.set_trace()
-    try:
-        os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {FINAL_FILE} --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
-    except:
-        sys.stderr.write("Postprocessing command failed.")
+    def parse(self, text, model, vocab_file):
+        """
+        This method is an interface around Neural DSR's prediction
+        commands and assorted settings. It processes one sentence (or unit
+        of text) at a time and returns the machine-readable discourse
+        representation structure.
 
-    # Read back in the resulting DRS.
-    with open(FINAL_FILE, "r") as outputf:
-        drs_parse = outputf.read()
+        Args:
+            text        (string):           A plain string of one or more sentences.
+            model       (str, optional):    Location of the model to use. Defaults to CURRENT_MODEL.
+            vocab_file  (str, optional):    Location of the vocab to use. Defaults to VOCAB_FILE.
+        """
+        # Put raw text in format we read with our dataset reader, i.e. add dummy DRS after each line
+        text = text.strip()
+        text = text + "\tDummy"
 
-    # Remove temporary files (clean up)
-    os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {FINAL_FILE}")
-    
-    if for_humans:
-        pass
-    else:
+        # It's not very pretty, but for now we have to turn this input into a file. 
+        # TODO: Figure out how to avoid these otherwise unnecessary files.
+        with open(INPUT_FILE, "w") as inputf:
+            print(text, file=inputf)
+
+        # Do the predicting -- to start we'll use the shell command. Pythonize this later.
+        try:
+            os.system(f"allennlp predict {CURRENT_MODEL} {INPUT_FILE} --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file {OUTPUT_FILE} {SILENT}")
+        except:
+            sys.stderr.write("Parsing command failed.")
+        
+        # Now do postprocessing, replace ill-formed DRSs by dummies
+        try:
+            os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {FINAL_FILE} --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
+        except:
+            sys.stderr.write("Postprocessing command failed.")
+
+        # Read back in the resulting DRS.
+        with open(FINAL_FILE, "r") as outputf:
+            drs_parse = outputf.read()
+
+        # Remove temporary files (clean up)
+        os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {FINAL_FILE}")
+        
         return drs_parse
-# {OUTPUT_FILE}.out
+
+    def pretty_print(self, drs):
+        print(drs)
