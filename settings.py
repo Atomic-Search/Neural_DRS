@@ -5,7 +5,9 @@
     allennlp_scripts/settings.sh
 """
 
-#settings.sh
+import os
+
+
 # Folders
 NEURAL_GIT = os.path.normpath(os.path.dirname( __file__ ))
 DRS_GIT = NEURAL_GIT + "/DRS_parsing"
@@ -38,7 +40,6 @@ FORCE = "-f"      # force reprocessing if directory already exists
 VOCAB = "vocabulary/"
 CONFIG = "config.json"
 MODEL_FILE = "model.tar.gz"
-#/settings.sh
 
 CURRENT_MODEL = f"{NEURAL_GIT}/models/allennlp/bert_char_1enc.tar.gz"
 VOCAB_FILE = f"{NEURAL_GIT}/vocabs/allennlp/tgt_bert_char_1enc.txt"
