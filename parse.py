@@ -17,19 +17,11 @@ Output: A discourse representation structure that analyzes the meaning
     of the input text.
 
 TODO: Add switch for outputing human-readable DRSs for debugging, etc.
-
-NB: Invoke this from the root directory like so:
-python ./src/allennlp_scripts/parse.py
 """
-
-__author__ = "Alan Hogue"
-__version__ = "0.1.0"
-
 
 import os
 import sys
 
-#FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 
 #settings.sh
 # Folders
@@ -111,8 +103,6 @@ def parse(text,
     import pdb; pdb.set_trace()
     try:
         os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {FINAL_FILE} --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
-                    #python $PP_PY --input_file $out_file --output_file ${out_file}.out --sig_file $SIG_FILE --fix --json --sep $SEP -rcl $REMOVE_CLAUSES -m $MIN_TOKENS -voc $vocab_file $no_sep
-
     except:
         sys.stderr.write("Postprocessing command failed.")
 
@@ -123,5 +113,8 @@ def parse(text,
     # Remove temporary files (clean up)
     os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {FINAL_FILE}")
     
-    return drs_parse
+    if for_humans:
+        pass
+    else:
+        return drs_parse
 # {OUTPUT_FILE}.out
