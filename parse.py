@@ -31,7 +31,7 @@ class Drs:
         self.vocab = vocab
         self.drs = self.parse(text, model, vocab)
     
-    def parse(self, text, model, vocab_file):
+    def parse(self, text, model, vocab):
         """
         This method is an interface around Neural DSR's prediction
         commands and assorted settings. It processes one sentence (or unit
@@ -73,5 +73,5 @@ class Drs:
         
         return drs_parse
 
-    def pretty_print(self, self.drs):
-        print(self.drs)
+    def pretty_print(self, drs):
+        print(drs)
