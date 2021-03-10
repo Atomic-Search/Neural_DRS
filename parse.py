@@ -33,7 +33,7 @@ import sys
 
 #settings.sh
 # Folders
-NEURAL_GIT = os.path.normpath(os.path.join(os.path.dirname( __file__ ), os.pardir))
+NEURAL_GIT = os.path.normpath(os.path.dirname( __file__ ))
 DRS_GIT = NEURAL_GIT + "/DRS_parsing"
 SRC_PYTHON = NEURAL_GIT + "/src"
 
