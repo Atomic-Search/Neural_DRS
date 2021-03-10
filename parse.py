@@ -74,4 +74,4 @@ class Drs:
         return drs_parse
 
     def pretty_print(self):
-        print(drs)
+        print(self.drs)
