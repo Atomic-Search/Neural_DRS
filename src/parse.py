@@ -27,6 +27,7 @@ __version__ = "0.1.0"
 
 
 import os
+import sys
 
 #FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -100,10 +101,16 @@ def parse(text,
         print(text, file=inputf)
 
     # Do the predicting -- to start we'll use the shell command. Pythonize this later.
-    os.system(f"allennlp predict {CURRENT_MODEL} {INPUT_FILE} --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file {OUTPUT_FILE} {SILENT}")
-
+    try:
+        os.system(f"allennlp predict {CURRENT_MODEL} {INPUT_FILE} --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file {OUTPUT_FILE} {SILENT}")
+    except:
+        sys.stderr.write("Parsing command failed.")
+    
     # Now do postprocessing, replace ill-formed DRSs by dummies
-    os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {OUTPUT_FILE}.out --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
+    try:
+        os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {OUTPUT_FILE}.out --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
+    except:
+        sys.stderr.write("Postprocessing command failed.")
 
     # Read back in the resulting DRS.
     with open(f"{OUTPUT_FILE}.out", "r") as outputf:
