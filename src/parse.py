@@ -45,7 +45,7 @@ FINAL_FILE = NEURAL_GIT + "/drs_representation.txt"
 
 # Setting for postprocessing
 REMOVE_CLAUSES = 75
-SEP = "|||"
+SEP = '"|||"'
 # Use this for word-based exps
 NO_SEP = "--no_sep"
 MIN_TOKENS = 10
@@ -111,6 +111,8 @@ def parse(text,
     import pdb; pdb.set_trace()
     try:
         os.system(f"python {PP_PY} --input_file {OUTPUT_FILE} --output_file {FINAL_FILE} --sig_file {SIG_FILE} --fix --json --sep {SEP} -rcl {REMOVE_CLAUSES} -m {MIN_TOKENS} -voc {VOCAB_FILE} {NO_SEP}")
+                    python $PP_PY --input_file $out_file --output_file ${out_file}.out --sig_file $SIG_FILE --fix --json --sep $SEP -rcl $REMOVE_CLAUSES -m $MIN_TOKENS -voc $vocab_file $no_sep
+
     except:
         sys.stderr.write("Postprocessing command failed.")
 
