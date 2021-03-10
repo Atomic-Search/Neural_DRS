@@ -29,11 +29,10 @@ __version__ = "0.1.0"
 import os
 
 FILE_PATH = os.path.dirname(os.path.realpath(__file__))
-CWD = os.getcwd()
 
 #settings.sh
 # Folders
-NEURAL_GIT = CWD
+NEURAL_GIT = FILE_PATH + "/.."
 DRS_GIT = NEURAL_GIT + "/DRS_parsing"
 SRC_PYTHON = NEURAL_GIT + "/src"
 
@@ -65,10 +64,10 @@ CONFIG = "config.json"
 MODEL_FILE = "model.tar.gz"
 #/settings.sh
 
-CURRENT_MODEL = f"{CWD}/models/allennlp/bert_char_1enc.tar.gz"
-VOCAB_FILE = f"{CWD}/vocabs/allennlp/tgt_bert_char_1enc.txt"
-INPUT_FILE = "drs_parse_input.drs"
-OUTPUT_FILE = "drs_parse_output.txt"
+CURRENT_MODEL = f"{NEURAL_GIT}/models/allennlp/bert_char_1enc.tar.gz"
+VOCAB_FILE = f"{NEURAL_GIT}/vocabs/allennlp/tgt_bert_char_1enc.txt"
+INPUT_FILE = f"{NEURAL_GIT}/drs_parse_input.drs"
+OUTPUT_FILE = f"{NEURAL_GIT}/drs_parse_output.txt"
 
 os.environ["PYTHONPATH"] = DRS_GIT + "/evaluation/:${PYTHONPATH}"
 os.environ["PYTHONPATH"] = NEURAL_GIT + "/src/:${PYTHONPATH}"
