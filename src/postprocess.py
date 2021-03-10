@@ -5,6 +5,8 @@
 Script that postprocesses DRS clauses produced by a neural seq2seq parser
 Example usage: python postprocess.py -i INPUT_FILE -o OUTPUT_FILE -v rel -s clf_signature.yaml
 '''
+import sys
+sys.path.append('/home/ubuntu/src/Neural_DRS/DRS_parsing/evaluation')
 
 import argparse
 import os
