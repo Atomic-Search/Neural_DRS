@@ -28,11 +28,11 @@ __version__ = "0.1.0"
 
 import os
 
-FILE_PATH = os.path.dirname(os.path.realpath(__file__))
+#FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 
 #settings.sh
 # Folders
-NEURAL_GIT = FILE_PATH + "/.."
+NEURAL_GIT = os.path.normpath(os.path.join(os.path.dirname( __file__ ), os.pardir))
 DRS_GIT = NEURAL_GIT + "/DRS_parsing"
 SRC_PYTHON = NEURAL_GIT + "/src"
 
