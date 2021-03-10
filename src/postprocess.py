@@ -5,6 +5,9 @@
 Script that postprocesses DRS clauses produced by a neural seq2seq parser
 Example usage: python postprocess.py -i INPUT_FILE -o OUTPUT_FILE -v rel -s clf_signature.yaml
 '''
+
+# This is a hacky fix because without it (for some reason), it can't find 
+# clf_referee. This should be fixed in a more principled way at some point.
 import sys
 sys.path.append('/home/ubuntu/src/Neural_DRS/DRS_parsing/evaluation')
 
