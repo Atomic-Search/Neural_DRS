@@ -16,6 +16,7 @@ Input: Raw text sentence (or potentially more, up to 50 characters for
 Output: A discourse representation structure object.
 """
 
+import pprint
 import os
 import sys
 from collections import defaultdict
@@ -33,6 +34,9 @@ class Drs:
         self.vocab = vocab
         self.drs = self.parse_text(text, model, vocab)
         self.parsed_drs = self.parse_drs(self.drs)
+    
+    def __repr__(self):
+        return text + "\n\n" + pprint.pp(parsed_drs)
     
     def parse_text(self, text, model, vocab):
         """
@@ -123,6 +127,12 @@ class Drs:
                 lexical_item = " ".join(terms[1:])
                 box[terms[1]] = lexical_item
                 box["lexical_items"].append(lexical_item)
+                if "v." in lexical_item:
+                    box["verbs"].append(lexical_item)
+                elif "n." in lexical_item:
+                    box["nouns"].append(lexical_item)
+                elif "a." in lexical_item:
+                    box["adj"].append)(lexical_item)
         boxes.append(copy.deepcopy(box))
         return boxes 
                 
