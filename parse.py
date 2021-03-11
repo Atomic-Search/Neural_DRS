@@ -101,7 +101,7 @@ class Drs:
                 box["box_id"] = terms[0]
             # All caps labels are always relations between boxes.
             if terms[1].isupper():
-                box[terms[1]].append(" ".join(terms[1:]))
+                box[terms[1]] = " ".join(terms[1:])
             elif '"now"' in clause:
                 tensed_var = terms[-2]
                 tense = terms[1]
