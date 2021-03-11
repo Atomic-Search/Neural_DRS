@@ -143,16 +143,16 @@ class Drs:
         for box in parsed_drs:
             keys = box.keys()
             if "refs" in keys:    
-                output =  "_____________________________\n"  #30 spaces
+                output = output +  "_____________________________\n"  #30 spaces
                 output = output + f"| {' '.join(box['refs'])}        {box['box_id']} |\n"
                 output = output +  "_____________________________\n"
             else:
-                output =  "_____________________________\n"  #30 spaces
+                output = output +  "_____________________________\n"  #30 spaces
                 output = output + f"|              {box['box_id']} |\n"
                 output = output +  "_____________________________\n"
-            if "pres" in keys:
-                for pre in box['pres']:
-                    output = output + f"{pre}\n"
+            #if "pres" in keys:
+            #    for pre in box['pres']:
+            #        output = output + f"{pre}\n"
             if "lexical_items" in keys:
                 for lexical_item in box['lexical_items']:
                     output = output + f"{lexical_item}\n"
