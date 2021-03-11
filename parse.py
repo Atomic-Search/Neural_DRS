@@ -91,7 +91,7 @@ class Drs:
             terms = clause.split(" ")
             if box_id != terms[0] and terms[0] != "b1":
                 # TODO: This is not working. Only outputs first box...
-                import pdb; pdb.set_trace()
+                # import pdb; pdb.set_trace()
                 boxes.append(copy.deepcopy(box))
                 box.clear()
                 box_id = terms[0]
@@ -123,6 +123,7 @@ class Drs:
                 lexical_item = " ".join(terms[1:])
                 box[terms[1]] = lexical_item
                 box["lexical_items"].append(lexical_item)
+        boxes.append(copy.deepcopy(box))
         return boxes 
                 
                     
