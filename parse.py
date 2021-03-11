@@ -153,7 +153,6 @@ class Drs:
                 if key.isupper():
                     terms = box[key].split(" ")
                     box_relations.append([key, terms[-1]])
-                    del box[key]
             # Everything else belongs within the current box.
             if "refs" in keys:    
                 output = output +  "_____________________________\n"  #30 spaces
