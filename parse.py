@@ -94,7 +94,6 @@ class Drs:
                 box.clear()
                 box_id = terms[0]
                 box["box_id"] = box_id
-            import pdb; pdb.set_trace()
             if "REF" in clause:
                 ref = terms[-1]
                 box["refs"].append(ref)
@@ -114,6 +113,7 @@ class Drs:
                 variables = terms[-1].strip()
             elif terms[1][0].isupper() and terms[1][1].islower():
                 # These are semantic roles.
+                import pdb; pdb.set_trace()
                 role = terms[1:].join(" ")
                 box[terms[1]] = str(role)
                 box["roles"].append(role)
