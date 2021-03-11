@@ -108,6 +108,7 @@ class Drs:
             elif "time" in clause:
                 terms = clause.split('"')
                 variables = terms[-1].strip()
+            import pdb; pdb.set_trace()
             elif terms[1][0].isupper() and terms[1][1].islower():
                 # These are semantic roles.
                 role = terms[1:].join(" ")
