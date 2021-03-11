@@ -139,9 +139,14 @@ class Drs:
         output = ""
         for box in parsed_drs:
             keys = box.keys()
-            output =  "_____________________________\n"  #30 spaces
-            output = output + f"| {' '.join(box['refs'])}     {box['box_id']} |\n"
-            output = output +  "_____________________________\n"
+            if "refs" in keys:    
+                output =  "_____________________________\n"  #30 spaces
+                output = output + f"| {' '.join(box['refs'])}        {box['box_id']} |\n"
+                output = output +  "_____________________________\n"
+            else:
+                output =  "_____________________________\n"  #30 spaces
+                output = output + f"|              {box['box_id']} |\n"
+                output = output +  "_____________________________\n"
             if "pres" in keys:
                 for pre in box['pres']:
                     output = output + f"{pre}\n"
@@ -153,7 +158,11 @@ class Drs:
                         for role in box['roles']:
                             pointer = role.split(' ')[-2]
                             if variable == pointer:
+                                box['roles'].remove(role)
                                 output = output + f"    {role}\n"
+            if len(box['roles']) > 0:
+                for role in box['roles']:
+                    output = output + f"    {role}\n"
             if "tense" in keys:
                 output = output + f"    {box['tensed']} "
                 if box['tense'] == "TPR":
