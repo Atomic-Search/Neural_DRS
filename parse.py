@@ -83,7 +83,10 @@ class Drs:
         box_id = ""
         boxes = []
         box = defaultdict(list)
-        for clause in drs:
+        drs = drs.strip()
+        drs = drs.replace("\n\n", "\n")
+        clauses = drs.split("\n")
+        for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
             if box_id != terms[0] and terms[0] != "b1":
