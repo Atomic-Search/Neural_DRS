@@ -132,7 +132,7 @@ class Drs:
                 elif "n." in lexical_item:
                     box["nouns"].append(lexical_item)
                 elif "a." in lexical_item:
-                    box["adj"].append)(lexical_item)
+                    box["mono"].append(lexical_item)
         boxes.append(copy.deepcopy(box))
         return boxes 
                 
