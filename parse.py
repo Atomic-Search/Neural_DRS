@@ -90,6 +90,8 @@ class Drs:
             clause = clause.strip()
             terms = clause.split(" ")
             if box_id != terms[0] and terms[0] != "b1":
+                # TODO: This is not working. Only outputs first box...
+                import pdb; pdb.set_trace()
                 boxes.append(copy.deepcopy(box))
                 box.clear()
                 box_id = terms[0]
@@ -113,7 +115,6 @@ class Drs:
                 variables = terms[-1].strip()
             elif terms[1][0].isupper() and terms[1][1].islower() and terms[1] != "Name":
                 # These are semantic roles.
-                import pdb; pdb.set_trace()
                 role = " ".join(terms[1:])
                 box[terms[1]] = str(role)
                 box["roles"].append(role)
