@@ -36,7 +36,7 @@ class Drs:
         self.parsed_drs = self.parse_drs(self.drs)
     
     def __repr__(self):
-        return self.text + "\n\n" + pprint.pp(self.parsed_drs)
+        return self.text + "\n\n" + pprint.pformat(self.parsed_drs)
     
     def parse_text(self, text, model, vocab):
         """
