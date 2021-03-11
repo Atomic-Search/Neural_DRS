@@ -97,6 +97,8 @@ class Drs:
                 box.clear()
                 box_id = terms[0]
                 box["box_id"] = box_id
+            elif terms[0] == "b1":
+                box["box_id"] = box_id
             if "REF" in clause:
                 ref = terms[-1]
                 box["refs"].append(ref)
@@ -111,10 +113,10 @@ class Drs:
                 tense = terms[1]
                 box["tensed"] = str(tensed_var)
                 box["tense"] = str(tense)
-            elif "time" in clause:
-                terms = clause.split('"')
-                variables = terms[-1].strip()
-                box['roles'].append(clause)
+            #elif "time" in clause:
+            #    terms = clause.split('"')
+            #    variables = terms[-1].strip()
+            #    box['roles'].append(clause)
             elif terms[1][0].isupper() and terms[1][1].islower() and terms[1] != "Name":
                 # These are semantic roles.
                 role = " ".join(terms[1:])
@@ -140,8 +142,25 @@ class Drs:
     def pp_drs(self):
         parsed_drs = self.parsed_drs
         output = ""
+        # "box relations" is any relation between boxes.
+        # These are usually presupposition, negation, and
+        # so on.
+        box_relations = []
+        last_box = ""
         for box in parsed_drs:
+            # Output any relations that are pointing to this box.
+            for box_relation in box_relations:
+                if box_relation[-1] == box['box_id']:
+                    output = output + "  {box_relation[0]}\n"
+                    box_relations.remove(box_relation)
+            # Collect any additional relations from this box.
             keys = box.keys()
+            for key in keys:
+                if key.isupper():
+                    terms = box[key].split(" ")
+                    box_relations.append([key, terms[-1]])
+                    del box[key]
+            # Everything else belongs within the current box.
             if "refs" in keys:    
                 output = output +  "_____________________________\n"  #30 spaces
                 output = output + f"| {' '.join(box['refs'])}        {box['box_id']} |\n"
@@ -172,7 +191,7 @@ class Drs:
                     output = output + f"< 'now'\n"
                 elif box['tense'] == "EQU":
                     output = output + f"= 'now'\n"
-            output = output + "_____________________________\n"
+            output = output + "_____________________________\n\n"
         print(output)                 
                     
                                 
