@@ -140,7 +140,7 @@ class Drs:
         for box in parsed_drs:
             keys = box.keys()
             output =  "_____________________________\n"  #30 spaces
-            output = output + f"| {box['refs']}           {box['box_id']} |\n"
+            output = output + f"| {" ".join(box['refs'])}     {box['box_id']} |\n"
             output = output +  "_____________________________\n"
             if "pres" in keys:
                 for pre in box['pres']:
