@@ -114,12 +114,12 @@ class Drs:
             elif terms[1][0].isupper() and terms[1][1].islower() and terms[1] != "Name":
                 # These are semantic roles.
                 import pdb; pdb.set_trace()
-                role = terms[1:].join(" ")
+                role = " ".join(terms[1:])
                 box[terms[1]] = str(role)
                 box["roles"].append(role)
             else:
                 # The rest should be lexical items.
-                lexical_item = terms[1:].join(" ")
+                lexical_item = " ".join(terms[1:])
                 box[terms[1]] = lexical_item
                 box["lexical_items"].append(lexical_item)
         return boxes 
