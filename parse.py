@@ -133,6 +133,9 @@ class Drs:
                     box["mono"].append(lexical_item)
         boxes.append(copy.deepcopy(box))
         return boxes 
+    
+    def raw(self):
+        print(self.drs)
                 
     def pp_drs(self):
         parsed_drs = self.parsed_drs
