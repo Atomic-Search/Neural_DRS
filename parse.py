@@ -161,7 +161,7 @@ class Drs:
                 elif box['tense'] == "EQU":
                     output = output + f"= 'now'\n"
             output = output + "_____________________________\n"
-        return output                
+        print(output)                 
                     
                                 
                     
