@@ -94,8 +94,8 @@ class Drs:
             clause = clause.strip()
             terms = clause.split(" ")
             if box_id != terms[0] and terms[0] != "b1":
-                # TODO: This is not working. Only outputs first box...
                 # import pdb; pdb.set_trace()
+                box["box_id"] = box_id
                 boxes.append(copy.deepcopy(box))
                 box.clear()
                 box_id = terms[0]
