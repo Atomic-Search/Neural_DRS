@@ -98,16 +98,10 @@ class Drs:
                 box_id = terms[0]
                 box["box_id"] = box_id
             elif terms[0] == "b1":
-                box["box_id"] = box_id
-            if "REF" in clause:
-                ref = terms[-1]
-                box["refs"].append(ref)
-            elif "PRESUPPOSITION" in clause:
-                preto = terms[-1]
-                box["pres"].append(preto)
-            elif "NEGATION" in clause:
-                negated = terms[-1]
-                box["neg"].append(negated)
+                box["box_id"] = terms[0]
+            # All caps labels are always relations between boxes.
+            if terms[1].isupper():
+                box[terms[1]].append(terms[1:])
             elif '"now"' in clause:
                 tensed_var = terms[-2]
                 tense = terms[1]
