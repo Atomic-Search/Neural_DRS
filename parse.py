@@ -114,7 +114,7 @@ class Drs:
             elif "time" in clause:
                 terms = clause.split('"')
                 variables = terms[-1].strip()
-                box['roles'] = clause
+                box['roles'].append(clause)
             elif terms[1][0].isupper() and terms[1][1].islower() and terms[1] != "Name":
                 # These are semantic roles.
                 role = " ".join(terms[1:])
