@@ -79,9 +79,6 @@ class Drs:
         os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {FINAL_FILE}")
         
         return drs_parse
-
-    def print(self):
-        print(self.drs)
         
     def parse_drs(self, drs):
         box_id = ""
@@ -117,6 +114,7 @@ class Drs:
             elif "time" in clause:
                 terms = clause.split('"')
                 variables = terms[-1].strip()
+                box['roles'] = clause
             elif terms[1][0].isupper() and terms[1][1].islower() and terms[1] != "Name":
                 # These are semantic roles.
                 role = " ".join(terms[1:])
@@ -136,8 +134,36 @@ class Drs:
         boxes.append(copy.deepcopy(box))
         return boxes 
                 
+    def pp_drs(self):
+        parsed_drs = self.parsed_drs
+        output = ""
+        for box in parsed_drs:
+            keys = box.keys()
+            output =  "_____________________________\n"  #30 spaces
+            output = output + f"| {box['refs']}           {box['box_id']} |\n"
+            output = output +  "_____________________________\n"
+            if "pres" in keys:
+                for pre in box['pres']:
+                    output = output + f"{pre}\n"
+            if "lexical_items" in keys:
+                for lexical_item in box['lexical_items']:
+                    output = output + f"{lexical_item}\n"
+                    variable = lexical_item.split(' ')[-1]
+                    if "roles" in keys:
+                        for role in box['roles']:
+                            pointer = role.split(' ')[-2]
+                            if variable == pointer:
+                                output = output + f"    {role}\n"
+            if "tense" in keys:
+                output = output + f"    {box['tensed']} "
+                if box['tense'] == "TPR":
+                    output = output + f"< 'now'\n"
+                elif box['tense'] == "EQU":
+                    output = output + f"= 'now'\n"
+            output = output + "_____________________________\n"
+                        
                     
-                    
+                                
                     
                     
                     
