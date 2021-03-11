@@ -32,7 +32,7 @@ class Drs:
         self.model = model
         self.vocab = vocab
         self.drs = self.parse_text(text, model, vocab)
-        self.parsed_drs = self.parse_drs(drs)
+        self.parsed_drs = self.parse_drs(self.drs)
     
     def parse_text(self, text, model, vocab):
         """
