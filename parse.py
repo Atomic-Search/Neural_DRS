@@ -102,7 +102,7 @@ class Drs:
                 box["box_id"] = box_id
             # All caps labels are always relations between boxes.
             # We will treat REFs different though.
-            if terms[1].isupper() and terms[1] != "REFS":
+            if terms[1].isupper() and terms[1] != "REF":
                 box[terms[1]] = " ".join(terms[1:])
             elif terms[1] == "REF":
                 box['REFS'].append(terms[-1])
