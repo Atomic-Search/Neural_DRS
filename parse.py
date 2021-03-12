@@ -90,10 +90,10 @@ class Drs:
         for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
+            import pdb; pdb.set_trace()
             if terms[0] == "b1":
                 box["box_id"] = "b1"
             if box_id != terms[0] and terms[0] != "b1":
-                # import pdb; pdb.set_trace()
                 box["box_id"] = box_id
                 boxes.append(copy.deepcopy(box))
                 box.clear()
@@ -154,9 +154,9 @@ class Drs:
                     terms = box[key].split(" ")
                     box_relations.append([key, terms[-1]])
             # Everything else belongs within the current box.
-            if "refs" in keys:    
+            if "REFS" in keys:    
                 output = output +  "_____________________________\n"  #30 spaces
-                output = output + f"| {' '.join(box['refs'])}        {box['box_id']} |\n"
+                output = output + f"| {' '.join(box['REFS'])}        {box['box_id']} |\n"
                 output = output +  "_____________________________\n"
             else:
                 output = output +  "_____________________________\n"  #30 spaces
