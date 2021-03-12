@@ -101,8 +101,11 @@ class Drs:
                 box_id = terms[0]
                 box["box_id"] = box_id
             # All caps labels are always relations between boxes.
-            if terms[1].isupper():
+            # We will treat REFs different though.
+            if terms[1].isupper() and terms[1] != "REFS":
                 box[terms[1]] = " ".join(terms[1:])
+            elif terms[1] == "REFS":
+                box['REFS'].append(terms[-1])
             elif '"now"' in clause:
                 tensed_var = terms[-2]
                 tense = terms[1]
