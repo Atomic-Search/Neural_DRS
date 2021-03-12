@@ -86,6 +86,8 @@ class Drs:
         box = defaultdict(list)
         drs = drs.strip()
         drs = drs.replace("\n\n", "\n")
+        # Occasionally we get clauses out of order.
+        drs.sort()
         clauses = drs.split("\n")
         for clause in clauses:
             clause = clause.strip()
