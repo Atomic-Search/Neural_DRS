@@ -104,7 +104,7 @@ class Drs:
             # We will treat REFs different though.
             if terms[1].isupper() and terms[1] != "REFS":
                 box[terms[1]] = " ".join(terms[1:])
-            elif terms[1] == "REFS":
+            elif terms[1] == "REF":
                 box['REFS'].append(terms[-1])
             elif '"now"' in clause:
                 tensed_var = terms[-2]
@@ -158,9 +158,9 @@ class Drs:
                     terms = box[key].split(" ")
                     box_relations.append([key, terms[-1]])
             # Everything else belongs within the current box.
-            if "REF" in keys:    
+            if "REFS" in keys:    
                 output = output +  "_____________________________\n"  #30 spaces
-                output = output + f"| {' '.join(box['REF'])}        {box['box_id']} |\n"
+                output = output + f"| {' '.join(box['REFS'])}        {box['box_id']} |\n"
                 output = output +  "_____________________________\n"
             else:
                 output = output +  "_____________________________\n"  #30 spaces
