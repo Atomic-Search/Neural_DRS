@@ -140,7 +140,7 @@ class Drs:
     def raw(self):
         print(self.drs)
                 
-    def pp(self):
+    def pp(self, parsed_drs):
         parsed_drs = self.parsed_drs
         output = ""
         # "box relations" is any relation between boxes.
