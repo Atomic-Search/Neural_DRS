@@ -90,9 +90,10 @@ class Drs:
         for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
-            import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
             if terms[0] == "b1":
                 box["box_id"] = "b1"
+                box_id = "b1"
             if box_id != terms[0] and terms[0] != "b1":
                 box["box_id"] = box_id
                 boxes.append(copy.deepcopy(box))
