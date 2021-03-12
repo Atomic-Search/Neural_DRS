@@ -158,9 +158,9 @@ class Drs:
                     terms = box[key].split(" ")
                     box_relations.append([key, terms[-1]])
             # Everything else belongs within the current box.
-            if "REFS" in keys:    
+            if "REF" in keys:    
                 output = output +  "_____________________________\n"  #30 spaces
-                output = output + f"| {' '.join(box['REFS'])}        {box['box_id']} |\n"
+                output = output + f"| {' '.join(box['REF'])}        {box['box_id']} |\n"
                 output = output +  "_____________________________\n"
             else:
                 output = output +  "_____________________________\n"  #30 spaces
