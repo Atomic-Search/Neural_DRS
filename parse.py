@@ -90,6 +90,8 @@ class Drs:
         for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
+            if terms[0] == "b1":
+                box["box_id"] = "b1"
             if box_id != terms[0] and terms[0] != "b1":
                 # import pdb; pdb.set_trace()
                 box["box_id"] = box_id
@@ -97,8 +99,6 @@ class Drs:
                 box.clear()
                 box_id = terms[0]
                 box["box_id"] = box_id
-            elif terms[0] == "b1":
-                box["box_id"] = terms[0]
             # All caps labels are always relations between boxes.
             if terms[1].isupper():
                 box[terms[1]] = " ".join(terms[1:])
@@ -145,7 +145,7 @@ class Drs:
             # Output any relations that are pointing to this box.
             for box_relation in box_relations:
                 if box_relation[-1] == box['box_id']:
-                    output = output + "  {box_relation[0]}\n"
+                    output = output + f"  {box_relation[0]}\n"
                     box_relations.remove(box_relation)
             # Collect any additional relations from this box.
             keys = box.keys()
