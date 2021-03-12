@@ -34,9 +34,10 @@ class Drs:
         self.vocab = vocab
         self.drs = self.parse_text(text, model, vocab)
         self.parsed_drs = self.parse_drs(self.drs)
+        self.pp = self.pp(self.parsed_drs)
     
     def __repr__(self):
-        return self.text + "\n\n" + pprint.pformat(self.parsed_drs)
+        return self.text + "\n\n" + self.pp
     
     def parse_text(self, text, model, vocab):
         """
@@ -139,7 +140,7 @@ class Drs:
     def raw(self):
         print(self.drs)
                 
-    def pp_drs(self):
+    def pp(self):
         parsed_drs = self.parsed_drs
         output = ""
         # "box relations" is any relation between boxes.
