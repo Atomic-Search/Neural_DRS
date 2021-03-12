@@ -87,8 +87,8 @@ class Drs:
         drs = drs.strip()
         drs = drs.replace("\n\n", "\n")
         # Occasionally we get clauses out of order.
-        drs.sort()
         clauses = drs.split("\n")
+        clauses.sort()
         for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
