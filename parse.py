@@ -154,7 +154,7 @@ class Drs:
             # Collect any additional relations from this box.
             keys = box.keys()
             for key in keys:
-                if key.isupper():
+                if key.isupper() and "REF" not in key:
                     terms = box[key].split(" ")
                     box_relations.append([key, terms[-1]])
             # Everything else belongs within the current box.
