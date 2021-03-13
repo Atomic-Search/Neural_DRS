@@ -25,7 +25,7 @@ from settings import (OUTPUT_FILE, INPUT_FILE, FINAL_FILE, PP_PY,
                       CURRENT_MODEL, VOCAB_FILE, SILENT, SIG_FILE,
                       SEP, REMOVE_CLAUSES, MIN_TOKENS, NO_SEP)
 from allennlp.predictors.predictor import Predictor
-from postprocess import do_postprocess
+from src.postprocess import do_postprocess
 
 #args.fix_senses, args.sig_file, args.input_file, args.vocab,
 #                                args.min_tokens, args.json, args.remove_clauses,
