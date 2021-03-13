@@ -10,6 +10,7 @@ Example usage: python postprocess.py -i INPUT_FILE -o OUTPUT_FILE -v rel -s clf_
 # clf_referee. This should be fixed in a more principled way at some point.
 import sys
 sys.path.append('/home/ubuntu/src/Neural_DRS/DRS_parsing/evaluation')
+sys.path.append('/home/ubuntu/src/Neural_DRS/src')
 
 import argparse
 import os
