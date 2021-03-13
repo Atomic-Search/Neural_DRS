@@ -24,8 +24,59 @@ import copy
 from settings import (OUTPUT_FILE, INPUT_FILE, FINAL_FILE, PP_PY, 
                       CURRENT_MODEL, VOCAB_FILE, SILENT, SIG_FILE,
                       SEP, REMOVE_CLAUSES, MIN_TOKENS, NO_SEP)
+from allennlp.predictors.predictor import Predictor
+from postprocess import do_postprocess
+
+#args.fix_senses, args.sig_file, args.input_file, args.vocab,
+#                                args.min_tokens, args.json, args.remove_clauses,
+#                                args.remove_roles_op, args.remove_concepts, args.sep, args.no_sep,
+#                                args.var, args.baseline, args.fix, args.fix_disc, args.no_referee
+
+# Additional args required for directly calling 'do_postprocess'
+JSON = True
+REMOVE_ROLES_OP = 0
+REMOVE_CONCEPTS = 0
+VAR = 'rel'
+BASELINE = False
+FIX = True
+FIX_DISC = False
+NO_REFEREE = False
+
+postprocess_args = ['', 
+                    SIG_FILE, 
+                    OUTPUT_FILE, # Switch this with the actual output of the predictor.
+                    VOCAB_FILE, 
+                    MIN_TOKENS, 
+                    JSON, 
+                    REMOVE_CLAUSES, 
+                    REMOVE_ROLES_OP, 
+                    REMOVE_CONCEPTS, 
+                    SEP, 
+                    NO_SEP,
+                    VAR,
+                    BASELINE,
+                    FIX,
+                    FIX_DISC,
+                    NO_REFEREE
+                    ]
 
 
+#python {PP_PY} 
+#    --input_file {} 
+#    --output_file {FINAL_FILE} 
+#    --sig_file {} 
+#    --fix 
+#    --json 
+#    --sep {} 
+#    -rcl {} 
+#    -m {} 
+#    -voc {} 
+#    {}
+
+
+oracle = Predictor.from_path(archive_path='./models/allennlp/bert_char_1enc.tar.gz',
+                            predictor_name='seq2seq',
+                            cuda_device=0)
 
 class Drs:
     def __init__(self, text, model=CURRENT_MODEL, vocab=VOCAB_FILE):
@@ -51,20 +102,31 @@ class Drs:
             model       (str, optional):    Location of the model to use. Defaults to CURRENT_MODEL.
             vocab_file  (str, optional):    Location of the vocab to use. Defaults to VOCAB_FILE.
         """
-        # Put raw text in format we read with our dataset reader, i.e. add dummy DRS after each line
-        text = text.strip()
-        text = text + "\tDummy"
-
+        # Text can be a string or a list. If it's a list, it's a batch job.
+        # Put raw text in format we read with our dataset reader, i.e. add dummy DRS after each line        
+        if isinstance(text, list):
+            for line in text:
+                line.strip()
+                line + "\tDummy"
+        else:
+            text = text.strip()
+            text = text + "\tDummy"
+            text = [text]
+        
         # It's not very pretty, but for now we have to turn this input into a file. 
         # TODO: Figure out how to avoid these otherwise unnecessary files.
-        with open(INPUT_FILE, "w") as inputf:
-            print(text, file=inputf)
+        #with open(INPUT_FILE, "w") as inputf:
+        #    print(text, file=inputf)
 
         # Do the predicting -- to start we'll use the shell command. Pythonize this later.
-        try:
-            os.system(f"allennlp predict {CURRENT_MODEL} {INPUT_FILE} --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file {OUTPUT_FILE} {SILENT}")
-        except:
-            sys.stderr.write("Parsing command failed.")
+        #try:
+        #    os.system(f"allennlp predict {CURRENT_MODEL} {INPUT_FILE} --use-dataset-reader --cuda-device 0 --predictor seq2seq --output-file {OUTPUT_FILE} {SILENT}")
+        #except:
+        #    sys.stderr.write("Parsing command failed.")
+        with open(OUTPUT_FILE, 'w') as of:
+            for line in text:
+                prediction = oracle.predict(line)
+                print(prediction, file=of)
         
         # Now do postprocessing, replace ill-formed DRSs by dummies
         try:
@@ -77,7 +139,7 @@ class Drs:
             drs_parse = outputf.read()
 
         # Remove temporary files (clean up)
-        os.system(f"rm {OUTPUT_FILE}; rm {INPUT_FILE}; rm {FINAL_FILE}")
+        os.system(f"rm {OUTPUT_FILE}; rm {FINAL_FILE}")
         
         return drs_parse
         
