@@ -199,11 +199,16 @@ def load_json_dict(d):
     return dic
 
 
-def json_by_line(input_file):
-    '''Read input file which is a file of json objects'''
+def json_by_line(predictions):
+    '''Read input file which is a file of json objects
+        or read input directly.'''
     data = []
-    with open(input_file, 'r') as f:
-        for line in f:
+    try:
+        with open(predictions, 'r') as f:
+            for line in f:
+                data.append(json.loads(line))
+    except:
+        for line in predictions:
             data.append(json.loads(line))
     return data
 
@@ -579,10 +584,7 @@ def read_allennlp_json_predictions(input_file, vocab, min_tokens):
        short otherwise. We need the vocab for that.
        Raise error if we did not specify a vocab to help us remember this issue'''
     vocab = read_and_strip_file(vocab)
-    try:
-        dict_lines = json_by_line(input_file)
-    except:
-        dict_lines = input_file
+    dict_lines = json_by_line(input_file)
     lines = []
     for i, dic in enumerate(dict_lines):
         tokens = dic["predicted_tokens"]
