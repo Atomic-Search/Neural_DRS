@@ -126,6 +126,10 @@ class Drs:
         with open(OUTPUT_FILE, 'w') as of:
             for line in text:
                 prediction = oracle.predict(line)
+                # For some reason this is returning a string that isn't
+                # valid JSON because it uses single quotes. I haven't been
+                # able to figure out why, but this should take care of it.
+                prediction.replace(/'/g, '"')
                 print(prediction, file=of)
         
         # Now do postprocessing, replace ill-formed DRSs by dummies
