@@ -579,7 +579,10 @@ def read_allennlp_json_predictions(input_file, vocab, min_tokens):
        short otherwise. We need the vocab for that.
        Raise error if we did not specify a vocab to help us remember this issue'''
     vocab = read_and_strip_file(vocab)
-    dict_lines = json_by_line(input_file)
+    try:
+        dict_lines = json_by_line(input_file)
+    except:
+        dict_lines = input_file
     lines = []
     for i, dic in enumerate(dict_lines):
         tokens = dic["predicted_tokens"]
