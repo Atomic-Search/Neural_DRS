@@ -89,8 +89,9 @@ class Drs:
         self.pp = self.pp(self.parsed_drs)
     
     def __repr__(self):
-        pp_str = "\n\n".join(self.pp)
-        return self.text + "\n\n" + pp_str
+        pp_lst = self.text
+        pp_lst.extend(self.pp)
+        return "\n\n".join(pp_lst)
     
     def parse_text(self, text, model, vocab):
         """
