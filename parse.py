@@ -21,6 +21,7 @@ import os
 import sys
 from collections import defaultdict
 import copy
+import json
 from settings import (OUTPUT_FILE, INPUT_FILE, FINAL_FILE, PP_PY, 
                       CURRENT_MODEL, VOCAB_FILE, SILENT, SIG_FILE,
                       SEP, REMOVE_CLAUSES, MIN_TOKENS, NO_SEP)
@@ -126,13 +127,8 @@ class Drs:
         with open(OUTPUT_FILE, 'w') as of:
             for line in text:
                 prediction = oracle.predict(line)
-                # For some reason this is returning a string that isn't
-                # valid JSON because it uses single quotes. I haven't been
-                # able to figure out why, but this should take care of it.
-                prediction.replace('"', "QUOTESSSS")
-                prediction.replace("'", '"')
-                prediction.replace("QUOTESSSS", '"')
-                print(prediction, file=of)
+                j_prediction = json.dumps(prediction)
+                print(j_prediction, file=of)
         
         # Now do postprocessing, replace ill-formed DRSs by dummies
         try:
