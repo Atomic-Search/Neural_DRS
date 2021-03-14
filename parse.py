@@ -129,7 +129,9 @@ class Drs:
                 # For some reason this is returning a string that isn't
                 # valid JSON because it uses single quotes. I haven't been
                 # able to figure out why, but this should take care of it.
-                prediction.replace(/'/g, '"')
+                prediction.replace('"', "QUOTESSSS")
+                prediction.replace("'", '"')
+                prediction.replace("QUOTESSSS", '"')
                 print(prediction, file=of)
         
         # Now do postprocessing, replace ill-formed DRSs by dummies
