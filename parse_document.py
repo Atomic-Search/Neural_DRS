@@ -34,7 +34,11 @@ def main(directory, max):
     else:
         print(f"Files found: {len(filenames)}")
     all_drss = []
+    i = 0
     for filename in filenames:
+        i += 1
+        if i > max:
+            break
         doc_drss = []
         with open("path_to_file/person.json", "r") as f:
             json_doc = json.load(f)
