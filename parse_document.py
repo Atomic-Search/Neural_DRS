@@ -63,11 +63,13 @@ def main(args):
         with open(f"{directory}/{filename}", "r") as f:
             json_doc = json.load(f)
         body = json_doc['text']
+        title = json_doc['title']
+        url = json_doc['source']
         doc = nlp(body)
         for sentence in doc.sents:
             parse_object = Drs(sentence.text)
             drs_list = parse_object.parsed_drs
-            drs_dict = {'sentence': sentence}
+            drs_dict = {'sentence': sentence, 'title': title, 'url': url}
             for box in drs_list:
                 drs_dict[box['box_id']] = box
             bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
