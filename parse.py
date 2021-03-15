@@ -89,10 +89,7 @@ class Drs:
         self.pp = self.pp(self.parsed_drs)
     
     def __repr__(self):
-        text = [self.text]
-        text.extend(self.pp)
-        import pdb; pdb.set_trace()
-        return "\n\n".join(text)
+        return self.text + "\n\n" + self.pp
     
     def parse_text(self, text, model, vocab):
         """
@@ -113,11 +110,9 @@ class Drs:
                 line.strip()
                 line + "\tDummy"
         else:
-            print("Input text must be a list, even if it is only one sentence.")
-        #else:
-        #    text = text.strip()
-        #    text = text + "\tDummy"
-        #    text = [text]
+            text = text.strip()
+            text = text + "\tDummy"
+            text = [text]
         
         # It's not very pretty, but for now we have to turn this input into a file. 
         # TODO: Figure out how to avoid these otherwise unnecessary files.
@@ -162,6 +157,7 @@ class Drs:
         for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
+            # import pdb; pdb.set_trace()
             if terms[0] == "b1":
                 box["box_id"] = "b1"
                 box_id = "b1"
