@@ -112,9 +112,11 @@ class Drs:
                 line.strip()
                 line + "\tDummy"
         else:
-            text = text.strip()
-            text = text + "\tDummy"
-            text = [text]
+            print("Input text must be a list, even if it is only one sentence.")
+        #else:
+        #    text = text.strip()
+        #    text = text + "\tDummy"
+        #    text = [text]
         
         # It's not very pretty, but for now we have to turn this input into a file. 
         # TODO: Figure out how to avoid these otherwise unnecessary files.
