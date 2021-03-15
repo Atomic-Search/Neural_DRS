@@ -52,7 +52,7 @@ def main(args):
         if i > max_files:
             break
         doc_drss = []
-        with open("path_to_file/person.json", "r") as f:
+        with open(f"{directory}/{filename}", "r") as f:
             json_doc = json.load(f)
         body = json_doc['text']
         doc = nlp(body)
