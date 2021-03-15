@@ -66,8 +66,9 @@ def main(args):
         title = json_doc['title']
         url = json_doc['source']
         doc = nlp(body)
-        for sentence in doc.sents:
-            parse_object = Drs(sentence.text)
+        for span in doc.sents:
+            sentence = span.text
+            parse_object = Drs(sentence)
             drs_list = parse_object.parsed_drs
             drs_dict = {'sentence': sentence, 'title': title, 'url': url}
             for box in drs_list:
