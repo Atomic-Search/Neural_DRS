@@ -91,6 +91,7 @@ class Drs:
     def __repr__(self):
         text = [self.text]
         text.extend(self.pp)
+        import pdb; pdb.set_trace()
         return "\n\n".join(text)
     
     def parse_text(self, text, model, vocab):
@@ -161,7 +162,6 @@ class Drs:
         for clause in clauses:
             clause = clause.strip()
             terms = clause.split(" ")
-            # import pdb; pdb.set_trace()
             if terms[0] == "b1":
                 box["box_id"] = "b1"
                 box_id = "b1"
