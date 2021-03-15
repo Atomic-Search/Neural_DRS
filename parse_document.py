@@ -29,7 +29,8 @@ def main(args):
     max_files = args.max
     # Initialize spacy sentencizer.
     nlp = English()
-    nlp.add_pipe("sentencizer")
+    sentencizer = nlp.create_pipe('sentencizer')
+    nlp.add_pipe(sentencizer)
     
     print(f"Getting list of files from directory: {directory}.")
     filenames = []
