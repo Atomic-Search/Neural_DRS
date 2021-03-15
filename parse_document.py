@@ -14,6 +14,7 @@ outputs the resulting DRSs.
 import sys
 sys.path.append('/home/ubuntu/src/mvp/single_article_search')
 
+
 from parse import Drs
 import json
 import os
@@ -22,8 +23,10 @@ from spacy.lang.en import English
 from AtomicCloud import bulkPushToElastic
 
 
-def main(directory, max):
+def main(args):
     """  """
+    directory = args.directory
+    max_files = args.max
     # Initialize spacy sentencizer.
     nlp = English()
     nlp.add_pipe("sentencizer")
@@ -45,7 +48,7 @@ def main(directory, max):
     i = 0
     for filename in filenames:
         i += 1
-        if i > max:
+        if i > max_files:
             break
         doc_drss = []
         with open("path_to_file/person.json", "r") as f:
@@ -64,17 +67,17 @@ def main(directory, max):
 
 if __name__ == "__main__":
     """  """
-    max = 0
+    
     parser = argparse.ArgumentParser()
 
     # Required positional argument
     parser.add_argument("directory", 
                         help="The absolute path to the directory in which \
                             the input documents are found.")
-    parser.add_argument("-m", "--max", action="store", dest="max",
+    parser.add_argument("-m", "--max", action="store", type=int,
                         help="Optionally enter a maximum number of \
                             documents to process.")
-                 
+     
     # Optional verbosity counter (eg. -v, -vv, -vvv, etc.)
     parser.add_argument(
         "-v",
