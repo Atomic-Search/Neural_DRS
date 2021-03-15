@@ -20,13 +20,23 @@ import json
 import os
 import argparse
 from spacy.lang.en import English
-from AtomicCloud import bulkPushToElastic
+from AtomicCloud import bulkPushToElastic, indexTeardown
 
 
 def main(args):
     """  """
     directory = args.directory
     max_files = args.max
+    teardown = args.teardown
+    index = "discourse_representation_structures"
+    if teardown:
+        if input(f"Tear down index '{index}'? (y/n)\n") == "y":
+            if input("Are you sure? (y/n)\n") == "y":
+                indexTeardown(index)
+                print(f"Tore down index {index}. Continuing...")
+            else:
+                print("Teardown aborted! Existing...")
+                sys.exit(0)
     # Initialize spacy sentencizer.
     nlp = English()
     sentencizer = nlp.create_pipe('sentencizer')
@@ -45,13 +55,11 @@ def main(args):
         raise Exception(f"No JSON files found in directory: {directory}")
     else:
         print(f"Files found: {len(filenames)}")
-    all_drss = []
     i = 0
     for filename in filenames:
         i += 1
         if i > max_files:
             break
-        doc_drss = []
         with open(f"{directory}/{filename}", "r") as f:
             json_doc = json.load(f)
         body = json_doc['text']
@@ -62,8 +70,7 @@ def main(args):
             drs_dict = {'sentence': sentence}
             for box in drs_list:
                 drs_dict[box['box_id']] = box
-            all_drss.append(drs_dict)
-    bulkPushToElastic(all_drss, "discourse_representation_structures", verbose=False)
+            bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
 
 
 if __name__ == "__main__":
@@ -78,6 +85,8 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--max", action="store", type=int,
                         help="Optionally enter a maximum number of \
                             documents to process.")
+    parser.add_argument("-t", "--teardown", action="store_true", default=False)
+
      
     # Optional verbosity counter (eg. -v, -vv, -vvv, etc.)
     parser.add_argument(
