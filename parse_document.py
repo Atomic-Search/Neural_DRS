@@ -6,12 +6,20 @@ breaks each one up into sentences, and feeds them into the DRS parser. It
 outputs the resulting DRSs.
 """
 
+# Hacky fix so that I can import from AtomicCloud.py.
+# TODO: Definitely fix this when things are integrated
+# into packages. Since this is still experimental,
+# I'm not going to try to do that stuff right now.
+
+import sys
+sys.path.append('/home/ubuntu/src/mvp/single_article_search')
+
 from parse import Drs
 import json
 import os
 import argparse
 from spacy.lang.en import English
-from mvp.single_article_search.AtomicCloud import bulkPushToElastic
+from AtomicCloud import bulkPushToElastic
 
 
 def main(directory, max):
