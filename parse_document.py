@@ -87,7 +87,7 @@ if __name__ == "__main__":
         help="Verbosity (-v, -vv, etc)")
 
     args = parser.parse_args()
-    if (not isinstance(max, int) or max < 1):
+    if args.max < 1:
         raise TypeError("Only positive integers allowed for optional \
                         --max argument.")
     
