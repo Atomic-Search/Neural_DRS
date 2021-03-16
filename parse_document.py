@@ -92,7 +92,7 @@ def main(args):
                     for wanted_field in wanted_fields:
                         if wanted_field in key:
                             # Elastic doesn't like any empty fields.
-                            if box[key]:
+                            if box[key] and key != '':
                                 # get rid of annoying differences in capitalization etc.
                                 box_for_elastic[wanted_field.lower()] = box[key]
                 drs_dict[box['box_id']] = box_for_elastic
