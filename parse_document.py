@@ -72,7 +72,26 @@ def main(args):
             drs_list = parse_object.parsed_drs
             drs_dict = {'sentence': sentence, 'title': title, 'url': url}
             for box in drs_list:
-                drs_dict[box['box_id']] = box
+                # We don't want to upload everything in this dict, so
+                # we'll make a new one with only what we want.
+                box_for_elastic = {}
+                wanted_fields = ("sentence",
+                                "title",
+                                "url",
+                                "PRESUPPOSITION",
+                                "REFS",
+                                "lexical_items",
+                                "nouns",
+                                "roles",
+                                "tensed",
+                                "tense",
+                                "Time",
+                                "verbs",)
+                for key in box.keys():
+                    if key in wanted_fields:
+                        # get rid of annoying differences in capitalization.
+                        box_for_elastic[key.lower()] = box[key]
+                drs_dict[box['box_id']] = box_for_elastic
             bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
 
 
