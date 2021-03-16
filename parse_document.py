@@ -92,11 +92,14 @@ def main(args):
                     for wanted_field in wanted_fields:
                         if wanted_field in key:
                             # Elastic doesn't like any empty fields.
-                            if box[key] and key != '':
+                            if box[key] and key != '' and wanted_field != '':
                                 # get rid of annoying differences in capitalization etc.
                                 box_for_elastic[wanted_field.lower()] = box[key]
                 drs_dict[box['box_id']] = box_for_elastic
-            bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
+            try:
+                bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
+            except:
+                print(f"Failed to load {drs_dict['sentence']} to elastic.")
 
 
 if __name__ == "__main__":
