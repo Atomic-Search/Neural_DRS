@@ -71,7 +71,7 @@ def main(args):
             parse_object = Drs(sentence)
             drs_list = parse_object.parsed_drs
             with open("pretty_printed.txt", "w") as pretty:
-                print(parse_object)
+                print(parse_object, file=pretty)
             drs_dict = {'sentence': sentence, 'title': title, 'url': url}
             for box in drs_list:
                 # We don't want to upload everything in this dict, so
