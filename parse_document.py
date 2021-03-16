@@ -86,7 +86,8 @@ def main(args):
                                 "tensed",
                                 "tense",
                                 "Time",
-                                "verbs",)
+                                "verbs",
+                                "NEGATION")
                 for key in box.keys():
                     if key in wanted_fields:
                         # get rid of annoying differences in capitalization.
