@@ -25,83 +25,83 @@ from AtomicCloud import bulkPushToElastic, indexTeardown
 
 def main(args):
     """  """
-    directory = args.directory
-    max_files = args.max
-    teardown = args.teardown
-    index = "discourse_representation_structures"
-    if teardown:
-        if input(f"Tear down index '{index}'? (y/n)\n") == "y":
-            if input("Are you sure? (y/n)\n") == "y":
-                indexTeardown(index)
-                print(f"Tore down index {index}. Continuing...")
-            else:
-                print("Teardown aborted! Existing...")
-                sys.exit(0)
-    # Initialize spacy sentencizer.
-    nlp = English()
-    sentencizer = nlp.create_pipe('sentencizer')
-    nlp.add_pipe(sentencizer)
-    
-    print(f"Getting list of files from directory: {directory}.")
-    filenames = []
-    drss = []
-    try:
-        for filename in os.listdir(directory):
-            if filename.endswith(".json"):
-                filenames.append(filename)
-    except:
-        print(f"Can't find directory: {directory}")
-    if len(filenames) < 1:
-        raise Exception(f"No JSON files found in directory: {directory}")
-    else:
-        print(f"Files found: {len(filenames)}")
-    i = 0
-    for filename in filenames:
-        i += 1
-        if i > max_files:
-            break
-        with open(f"{directory}/{filename}", "r") as f:
-            json_doc = json.load(f)
-        body = json_doc['text']
-        title = json_doc['title']
-        url = json_doc['source']
-        doc = nlp(body)
-        for span in doc.sents:
-            sentence = span.text
-            parse_object = Drs(sentence)
-            drs_list = parse_object.parsed_drs
-            with open("pretty_printed.txt", "w") as pretty:
+    with open("pretty_printed.txt", "w") as pretty:
+        directory = args.directory
+        max_files = args.max
+        teardown = args.teardown
+        index = "discourse_representation_structures"
+        if teardown:
+            if input(f"Tear down index '{index}'? (y/n)\n") == "y":
+                if input("Are you sure? (y/n)\n") == "y":
+                    indexTeardown(index)
+                    print(f"Tore down index {index}. Continuing...")
+                else:
+                    print("Teardown aborted! Existing...")
+                    sys.exit(0)
+        # Initialize spacy sentencizer.
+        nlp = English()
+        sentencizer = nlp.create_pipe('sentencizer')
+        nlp.add_pipe(sentencizer)
+        
+        print(f"Getting list of files from directory: {directory}.")
+        filenames = []
+        drss = []
+        try:
+            for filename in os.listdir(directory):
+                if filename.endswith(".json"):
+                    filenames.append(filename)
+        except:
+            print(f"Can't find directory: {directory}")
+        if len(filenames) < 1:
+            raise Exception(f"No JSON files found in directory: {directory}")
+        else:
+            print(f"Files found: {len(filenames)}")
+        i = 0
+        for filename in filenames:
+            i += 1
+            if i > max_files:
+                break
+            with open(f"{directory}/{filename}", "r") as f:
+                json_doc = json.load(f)
+            body = json_doc['text']
+            title = json_doc['title']
+            url = json_doc['source']
+            doc = nlp(body)
+            for span in doc.sents:
+                sentence = span.text
+                parse_object = Drs(sentence)
+                drs_list = parse_object.parsed_drs
                 print(parse_object, file=pretty)
-            drs_dict = {'sentence': sentence, 'title': title, 'url': url}
-            for box in drs_list:
-                # We don't want to upload everything in this dict, so
-                # we'll make a new one with only what we want.
-                box_for_elastic = {}
-                wanted_fields = ("sentence",
-                                "title",
-                                "url",
-                                "PRESUPPOSITION",
-                                "REFS",
-                                "lexical_items",
-                                "nouns",
-                                "roles",
-                                "tensed",
-                                "tense",
-                                "Time",
-                                "verbs",
-                                "NEGATION")
-                for key in box.keys():
-                    for wanted_field in wanted_fields:
-                        if wanted_field in key:
-                            # Elastic doesn't like any empty fields.
-                            if box[key] and key != '' and wanted_field != '':
-                                # get rid of annoying differences in capitalization etc.
-                                box_for_elastic[wanted_field.lower()] = box[key]
-                drs_dict[box['box_id']] = box_for_elastic
-            try:
-                bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
-            except:
-                print(f"Failed to load {drs_dict['sentence']} to elastic.")
+                drs_dict = {'sentence': sentence, 'title': title, 'url': url}
+                for box in drs_list:
+                    # We don't want to upload everything in this dict, so
+                    # we'll make a new one with only what we want.
+                    box_for_elastic = {}
+                    wanted_fields = ("sentence",
+                                    "title",
+                                    "url",
+                                    "PRESUPPOSITION",
+                                    "REFS",
+                                    "lexical_items",
+                                    "nouns",
+                                    "roles",
+                                    "tensed",
+                                    "tense",
+                                    "Time",
+                                    "verbs",
+                                    "NEGATION")
+                    for key in box.keys():
+                        for wanted_field in wanted_fields:
+                            if wanted_field in key:
+                                # Elastic doesn't like any empty fields.
+                                if box[key] and key != '' and wanted_field != '':
+                                    # get rid of annoying differences in capitalization etc.
+                                    box_for_elastic[wanted_field.lower()] = box[key]
+                    drs_dict[box['box_id']] = box_for_elastic
+                try:
+                    bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
+                except:
+                    print(f"Failed to load {drs_dict['sentence']} to elastic.")
 
 
 if __name__ == "__main__":
