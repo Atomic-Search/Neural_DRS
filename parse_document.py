@@ -70,6 +70,8 @@ def main(args):
             sentence = span.text
             parse_object = Drs(sentence)
             drs_list = parse_object.parsed_drs
+            with open("pretty_printed.txt", "w") as pretty:
+                print(parse_object)
             drs_dict = {'sentence': sentence, 'title': title, 'url': url}
             for box in drs_list:
                 # We don't want to upload everything in this dict, so
