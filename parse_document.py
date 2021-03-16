@@ -89,9 +89,10 @@ def main(args):
                                 "verbs",
                                 "NEGATION")
                 for key in box.keys():
-                    if key in wanted_fields:
-                        # get rid of annoying differences in capitalization.
-                        box_for_elastic[key.lower()] = box[key]
+                    for wanted_field in wanted_fields:
+                        if wanted_field in key:
+                            # get rid of annoying differences in capitalization etc.
+                            box_for_elastic[wanted_field.lower()] = box[key]
                 drs_dict[box['box_id']] = box_for_elastic
             bulkPushToElastic([drs_dict], "discourse_representation_structures", verbose=False)
 
